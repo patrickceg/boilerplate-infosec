@@ -1,12 +1,20 @@
 const express = require('express');
 const helmet = require("helmet");
 const app = express();
-app.use(helmet.hidePoweredBy());
-// Don't allow me to be in ANY frames:
-app.use(helmet.frameguard({ action: "deny" }));
-app.use(helmet.xssFilter());
-app.use(helmet.noSniff());
-app.use(helmet.ieNoOpen());
+
+
+app.use(helmet({
+    frameguard: {         // configure
+        action: 'deny'
+    },
+    contentSecurityPolicy: {    // enable and configure
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "trusted-cdn.com"],
+        }
+    },
+    dnsPrefetchControl: false     // disable
+}))
 
 // Add HSTS
 const strictTransportSecurity = require("hsts");
@@ -16,18 +24,6 @@ app.use(
         includeSubDomains: true,
     })
 );
-const contentSecurityPolicy = require("helmet-csp");
-app.use(
-    contentSecurityPolicy({
-        useDefaults: true,
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "trusted-cdn.com"],
-        },
-        reportOnly: false,
-    })
-);
-
 
 // Items that we may not want in a performance server
 app.use(helmet.dnsPrefetchControl())    // DNS prefetch for links
