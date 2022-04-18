@@ -4,7 +4,7 @@ const app = express();
 app.use(helmet.hidePoweredBy());
 // Don't allow me to be in ANY frames:
 app.use(helmet.frameguard({ action: "deny" }));
-
+app.use(helmet.xssFilter());
 
 
 
