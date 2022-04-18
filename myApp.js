@@ -16,8 +16,9 @@ app.use(
         includeSubDomains: true,
     })
 );
-
-app.use(helmet.dnsPrefetchControl())
+// Items that we may not want in a performance server
+app.use(helmet.dnsPrefetchControl())    // DNS prefetch for links
+app.use(helmet.noCache())               // Disable cache
 
 
 
