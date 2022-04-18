@@ -7,6 +7,14 @@ app.use(helmet.frameguard({ action: "deny" }));
 app.use(helmet.xssFilter());
 app.use(helmet.noSniff());
 app.use(helmet.ieNoOpen());
+// Add HSTS
+const strictTransportSecurity = require("hsts");
+app.use(
+    strictTransportSecurity({
+        maxAge: 90 * 24 * 60 * 60,
+        includeSubDomains: true,
+    })
+);
 
 
 
