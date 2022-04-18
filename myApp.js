@@ -16,6 +16,19 @@ app.use(
         includeSubDomains: true,
     })
 );
+const contentSecurityPolicy = require("helmet-csp");
+app.use(
+    contentSecurityPolicy({
+        useDefaults: true,
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "trusted-cdn.com"],
+        },
+        reportOnly: false,
+    })
+);
+
+
 // Items that we may not want in a performance server
 app.use(helmet.dnsPrefetchControl())    // DNS prefetch for links
 app.use(helmet.noCache())               // Disable cache
