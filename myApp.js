@@ -2,7 +2,8 @@ const express = require('express');
 const helmet = require("helmet");
 const app = express();
 app.use(helmet.hidePoweredBy());
-
+// Don't allow me to be in ANY frames:
+app.use(frameguard({ action: "deny" }));
 
 
 
